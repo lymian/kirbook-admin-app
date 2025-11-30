@@ -1,0 +1,103 @@
+<div class="container-fluid py-4">
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando datos del libro...</span>
+    </div>
+    <h2 class="mt-2 text-white">Cargando datos del libro...</h2>
+  </div>
+
+  <div [hidden]="cargando">
+    <h2 class="mb-4 text-warning"><i class="bi bi-pencil-square me-2"></i> Editar Libro</h2>
+
+    <div *ngIf="error" class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
+      <div>**Error:** {{ error }}</div>
+    </div>
+
+    <div *ngIf="exito" class="alert alert-success d-flex align-items-center" role="alert">
+      <i class="bi bi-check-circle-fill flex-shrink-0 me-2"></i>
+      <div>**Éxito:** {{ exito }}</div>
+    </div>
+
+    <div class="card bg-dark border-warning shadow-lg">
+      <div class="card-body">
+        <form [formGroup]="libroForm" (ngSubmit)="guardarCambios()" class="row g-4">
+          <div class="col-md-6">
+            <label for="tituloInput" class="form-label">Título</label>
+            <input type="text" class="form-control bg-secondary text-white border-secondary" id="tituloInput"
+              formControlName="titulo" />
+          </div>
+
+          <div class="col-md-3">
+            <label for="fechaInput" class="form-label">Fecha de Publicación</label>
+            <input type="date" class="form-control bg-secondary text-white border-secondary" id="fechaInput"
+              formControlName="fechaPublicacion" />
+          </div>
+
+          <div class="col-md-3">
+            <label for="estadoSelect" class="form-label">Estado</label>
+            <select class="form-select bg-secondary text-white border-secondary" id="estadoSelect"
+              formControlName="estado">
+              <option [value]="true">Activo</option>
+              <option [value]="false">Inactivo</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label for="sinopsisTextarea" class="form-label">Sinopsis</label>
+            <textarea rows="3" class="form-control bg-secondary text-white border-secondary" id="sinopsisTextarea"
+              formControlName="sinopsis"></textarea>
+          </div>
+
+          <div class="col-md-3">
+            <label for="precioInput" class="form-label">Precio (S/)</label>
+            <input type="number" class="form-control bg-secondary text-white border-secondary" id="precioInput"
+              formControlName="precio" min="0" />
+          </div>
+
+          <div class="col-md-3">
+            <label for="descuentoInput" class="form-label">Descuento (%)</label>
+            <input type="number" class="form-control bg-secondary text-white border-secondary" id="descuentoInput"
+              formControlName="descuento" min="0" max="100" />
+          </div>
+
+          <div class="col-md-3">
+            <label for="stockInput" class="form-label">Stock</label>
+            <input type="number" class="form-control bg-secondary text-white border-secondary" id="stockInput"
+              formControlName="stock" min="0" />
+          </div>
+
+          <div class="col-md-3">
+            <label for="autorSelect" class="form-label">Autor</label>
+            <select class="form-select bg-secondary text-white border-secondary" id="autorSelect"
+              formControlName="autorId">
+              <option *ngFor="let a of autores" [value]="a.id">
+                {{ a.nombre }} {{ a.apellido }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label for="categoriaSelect" class="form-label">Categoría</label>
+            <select class="form-select bg-secondary text-white border-secondary" id="categoriaSelect"
+              formControlName="categoriaId">
+              <option *ngFor="let c of categorias" [value]="c.id">
+                {{ c.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-12 d-flex justify-content-between pt-3 border-top border-secondary mt-5">
+            <button type="button" class="btn btn-secondary" (click)="volver()">
+              <i class="bi bi-arrow-left-circle me-1"></i> Volver a Lista
+            </button>
+
+            <button type="submit" class="btn btn-warning" [disabled]="libroForm.invalid">
+              <i class="bi bi-floppy-fill me-1"></i> Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

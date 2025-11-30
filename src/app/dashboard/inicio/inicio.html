@@ -1,0 +1,170 @@
+<div class="container-fluid py-4">
+    <h2 class="mb-4 text-white"><i class="bi bi-speedometer2 me-2"></i> Dashboard</h2>
+
+    @if (cargando) {
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando dashboard...</span>
+        </div>
+        <p class="mt-2 text-white">Cargando datos...</p>
+    </div>
+    } @else {
+    <!-- KPIs -->
+    <div class="row g-4 mb-4">
+        <!-- Pedidos Pendientes -->
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-warning p-3 me-3 text-dark">
+                        <i class="bi bi-hourglass-split fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle text-muted mb-1">Pedidos Pendientes</h6>
+                        <h3 class="card-title text-white mb-0">{{ totalPedidosPendientes }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Libros -->
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-info p-3 me-3 text-dark">
+                        <i class="bi bi-book fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle text-muted mb-1">Libros en Catálogo</h6>
+                        <h3 class="card-title text-white mb-0">{{ totalLibros }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clientes -->
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-success p-3 me-3 text-white">
+                        <i class="bi bi-people fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle text-muted mb-1">Clientes Registrados</h6>
+                        <h3 class="card-title text-white mb-0">{{ totalClientes }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alertas Stock -->
+        <div class="col-md-3">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="rounded-circle bg-danger p-3 me-3 text-white">
+                        <i class="bi bi-exclamation-triangle fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="card-subtitle text-muted mb-1">Alertas de Stock</h6>
+                        <h3 class="card-title text-white mb-0">{{ alertasStock }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Últimos Pedidos Pendientes -->
+        <div class="col-md-8">
+            <div class="card bg-dark border-secondary h-100">
+                <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-white"><i class="bi bi-clock-history me-2"></i> Últimos Pedidos Pendientes</h5>
+                    <button class="btn btn-sm btn-outline-light" (click)="irAPedidos()">Ver Todos</button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" *ngIf="ultimosPedidos.length > 0; else noPedidos">
+                        <table class="table table-dark table-hover mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Fecha</th>
+                                    <th class="text-end">Total</th>
+                                    <th class="text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let pedido of ultimosPedidos">
+                                    <td>#{{ pedido.id }}</td>
+                                    <td>{{ pedido.nombreCliente }} {{ pedido.apellidoCliente }}</td>
+                                    <td>{{ pedido.fecha | date:'short' }}</td>
+                                    <td class="text-end text-success fw-bold">S/ {{ pedido.total | number:'1.2-2' }}
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-info" [routerLink]="['/dashboard/pedidos']"
+                                            title="Ver Detalles">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ng-template #noPedidos>
+                        <div class="p-4 text-center text-muted">
+                            <i class="bi bi-check-circle fs-1 d-block mb-2"></i>
+                            No hay pedidos pendientes recientes.
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alertas de Stock & Accesos Rápidos -->
+        <div class="col-md-4">
+            <!-- Alertas de Stock -->
+            <div class="card bg-dark border-secondary mb-4">
+                <div class="card-header border-secondary">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-exclamation-circle me-2"></i> Stock Bajo (< 5)</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush bg-dark"
+                        *ngIf="librosBajoStock.length > 0; else noStockBajo">
+                        <li class="list-group-item bg-dark text-white border-secondary d-flex justify-content-between align-items-center"
+                            *ngFor="let libro of librosBajoStock.slice(0, 5)">
+                            <span class="text-truncate" style="max-width: 70%;">{{ libro.titulo }}</span>
+                            <span class="badge bg-danger rounded-pill">{{ libro.stock }} un.</span>
+                        </li>
+                        <li class="list-group-item bg-dark text-center border-secondary"
+                            *ngIf="librosBajoStock.length > 5">
+                            <small class="text-muted">... y {{ librosBajoStock.length - 5 }} más</small>
+                        </li>
+                    </ul>
+                    <ng-template #noStockBajo>
+                        <div class="p-3 text-center text-success">
+                            <i class="bi bi-check-lg me-1"></i> Todo el inventario está OK.
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- Accesos Rápidos -->
+            <div class="card bg-dark border-secondary">
+                <div class="card-header border-secondary">
+                    <h5 class="mb-0 text-white"><i class="bi bi-lightning-charge me-2"></i> Accesos Rápidos</h5>
+                </div>
+                <div class="card-body d-grid gap-2">
+                    <a routerLink="/dashboard/libros/registrar" class="btn btn-outline-primary text-start">
+                        <i class="bi bi-journal-plus me-2"></i> Registrar Nuevo Libro
+                    </a>
+                    <a routerLink="/dashboard/pedidos" class="btn btn-outline-warning text-start">
+                        <i class="bi bi-list-check me-2"></i> Gestionar Pedidos
+                    </a>
+                    <a routerLink="/dashboard/clientes" class="btn btn-outline-success text-start">
+                        <i class="bi bi-people me-2"></i> Ver Clientes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

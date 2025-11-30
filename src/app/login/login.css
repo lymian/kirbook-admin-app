@@ -1,0 +1,83 @@
+/* --- Fondo oscuro con leve degradado --- */
+.login-bg {
+  background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+  padding: 20px;
+}
+
+/* --- Tarjeta con estilo moderno (glass + sombra) --- */
+.login-card {
+  width: 380px;
+  background: rgba(40, 40, 40, 0.85);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* --- Contenedor con icono dentro del input --- */
+.input-icon-container {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+/* Dejar espacio para icono */
+.icon-padding {
+  padding-left: 40px !important;
+}
+
+/* --- Inputs oscuros con borde animado --- */
+.login-input {
+  background-color: #1c1c1c !important;
+  border: 1px solid #444 !important;
+  color: #fff !important;
+  transition: all 0.2s ease;
+}
+
+.login-input:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.6) !important;
+  background-color: #222 !important;
+}
+
+/* --- Botón con gradiente moderno --- */
+.login-btn {
+  background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+  color: white;
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.login-btn:hover:not([disabled]) {
+  background: linear-gradient(135deg, #0b5ed7, #0a58ca);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+}
+
+/* --- Animación de entrada --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

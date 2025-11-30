@@ -1,0 +1,51 @@
+<div class="login-bg d-flex justify-content-center align-items-center vh-100">
+  <div class="login-card p-4">
+    <h3 class="text-center mb-4"><i class="bi bi-person-badge me-2"></i> Iniciar Sesión</h3>
+
+    <form (ngSubmit)="iniciarSesion()">
+      <!-- Usuario -->
+      <div class="mb-3">
+        <label class="form-label">Usuario</label>
+        <div class="input-icon-container">
+          <i class="bi bi-person input-icon"></i>
+          <input
+            type="text"
+            class="form-control login-input icon-padding"
+            [(ngModel)]="username"
+            name="username"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+        <div class="input-icon-container">
+          <i class="bi bi-lock input-icon"></i>
+          <input
+            type="password"
+            class="form-control login-input icon-padding"
+            [(ngModel)]="password"
+            name="password"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" class="btn login-btn w-100 mt-2" [disabled]="cargando">
+        <span *ngIf="!cargando"><i class="bi bi-box-arrow-in-right me-2"></i>Entrar</span>
+
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status"></span>
+        <span *ngIf="cargando" class="ms-2">Cargando...</span>
+      </button>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMensaje" class="alert alert-danger mt-3 py-2 text-center">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ errorMensaje }}
+      </div>
+    </form>
+  </div>
+</div>

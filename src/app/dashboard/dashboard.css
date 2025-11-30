@@ -1,0 +1,19 @@
+/* Asegura que el contenido activo se resalte en el tema oscuro */
+.nav-link.active {
+  background-color: var(--bs-primary) !important; /* El color primario de Bootstrap para destacar */
+  color: white !important;
+}
+
+/* Opcional: El color de fondo del body para mantener la consistencia oscura */
+body {
+  background-color: #212529; /* Color de fondo oscuro de Bootstrap */
+}
+
+/* Opcional: Estilo para que el dropdown del usuario se vea mejor */
+.dropdown-toggle::after {
+  margin-left: 0.5rem;
+}
+.content{
+  min-height: 100vh;
+  background-color: rgb(37, 37, 37) !important;
+}

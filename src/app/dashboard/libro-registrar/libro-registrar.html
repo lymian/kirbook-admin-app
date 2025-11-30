@@ -1,0 +1,119 @@
+<div class="container-fluid py-4">
+  <h2 class="mb-4"><i class="bi bi-journal-plus me-2"></i> Registrar Nuevo Libro</h2>
+
+  <div class="card bg-dark border-secondary shadow-lg">
+    <div class="card-body">
+      <form (ngSubmit)="registrarLibro()" class="row g-4">
+        <div class="col-md-6">
+          <label for="tituloInput" class="form-label">Título</label>
+          <input type="text" class="form-control bg-secondary text-white border-secondary" id="tituloInput"
+            [(ngModel)]="libro.titulo" name="titulo" placeholder="Título completo del libro" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="sinopsisInput" class="form-label">Sinopsis (Resumen)</label>
+          <input type="text" class="form-control bg-secondary text-white border-secondary" id="sinopsisInput"
+            [(ngModel)]="libro.sinopsis" name="sinopsis" placeholder="Breve descripción" required />
+        </div>
+
+        <div class="col-md-4">
+          <label for="fechaInput" class="form-label">Fecha de publicación</label>
+          <input type="date" class="form-control bg-secondary text-white border-secondary" id="fechaInput"
+            [(ngModel)]="libro.fechaPublicacion" name="fechaPublicacion" required />
+        </div>
+
+        <div class="col-md-2">
+          <label for="precioInput" class="form-label">Precio (S/)</label>
+          <input type="number" class="form-control bg-secondary text-white border-secondary" id="precioInput"
+            [(ngModel)]="libro.precio" name="precio" placeholder="0.00" min="0" required />
+        </div>
+
+        <div class="col-md-2">
+          <label for="descuentoInput" class="form-label">Descuento (%)</label>
+          <input type="number" class="form-control bg-secondary text-white border-secondary" id="descuentoInput"
+            [(ngModel)]="libro.descuento" name="descuento" placeholder="0" min="0" max="50" />
+        </div>
+
+        <div class="col-md-4">
+          <label for="stockInput" class="form-label">Stock (Cantidad)</label>
+          <input type="number" class="form-control bg-secondary text-white border-secondary" id="stockInput"
+            [(ngModel)]="libro.stock" name="stock" placeholder="0" min="0" required />
+        </div>
+
+        <div class="col-md-6">
+          <label for="autorSelect" class="form-label">Autor</label>
+          <select class="form-select bg-secondary text-white border-secondary" id="autorSelect"
+            [(ngModel)]="libro.autorId" name="autorId" required>
+            <option value="0">Seleccione autor</option>
+            <option *ngFor="let a of autores" [value]="a.id">
+              {{ a.nombre }} {{ a.apellido }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label for="categoriaSelect" class="form-label">Categoría</label>
+          <select class="form-select bg-secondary text-white border-secondary" id="categoriaSelect"
+            [(ngModel)]="libro.categoriaId" name="categoriaId" required>
+            <option value="0">Seleccione categoría</option>
+            <option *ngFor="let c of categorias" [value]="c.id">
+              {{ c.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between pt-3">
+          <button type="button" class="btn btn-secondary" (click)="volver()">
+            <i class="bi bi-arrow-left-circle me-1"></i> Volver
+          </button>
+
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save me-1"></i> Registrar Libro
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal d-block" tabindex="-1" *ngIf="modalError" style="background-color: rgba(0, 0, 0, 0.5)">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-danger">
+          <i class="bi bi-x-octagon-fill me-2"></i> Error de Registro
+        </h5>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="cerrarError()"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ modalError }}</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-danger" (click)="cerrarError()">
+          <i class="bi bi-check-circle me-1"></i> Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal d-block" tabindex="-1" *ngIf="modalExito" style="background-color: rgba(0, 0, 0, 0.5)">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-success">
+          <i class="bi bi-check-circle-fill me-2"></i> Registro Exitoso
+        </h5>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modalExito = ''"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ modalExito }}</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-success" (click)="modalExito = ''">
+          <i class="bi bi-check-circle me-1"></i> Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

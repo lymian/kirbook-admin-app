@@ -1,0 +1,164 @@
+<div class="container-fluid py-4">
+  <h2 class="mb-4"><i class="bi bi-person-badge-fill me-2"></i> Gestión de Autores</h2>
+
+  <div class="card bg-dark border-secondary mb-4">
+    <div class="card-header border-secondary">
+      <h5 class="mb-0 text-white"><i class="bi bi-person-plus-fill me-2"></i> Agregar Autor</h5>
+    </div>
+    <div class="card-body">
+      <form class="row g-3" (ngSubmit)="crearAutor()">
+        <div class="col-md-5">
+          <label for="inputNombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control form-control-dark bg-secondary text-white border-secondary"
+            id="inputNombre" placeholder="Nombre" [(ngModel)]="autorNuevo.nombre" name="autorNuevoNombre" required />
+        </div>
+
+        <div class="col-md-5">
+          <label for="inputApellido" class="form-label">Apellido</label>
+          <input type="text" class="form-control form-control-dark bg-secondary text-white border-secondary"
+            id="inputApellido" placeholder="Apellido" [(ngModel)]="autorNuevo.apellido" name="autorNuevoApellido"
+            required />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Agregar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card bg-dark border-secondary">
+    <div class="card-header border-secondary">
+      <h5 class="mb-0 text-white"><i class="bi bi-list-check me-2"></i> Listado de Autores</h5>
+    </div>
+    <div class="card-body">
+      <div *ngIf="cargando" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando autores...</span>
+        </div>
+        <p class="mt-2">Cargando autores...</p>
+      </div>
+
+      <div *ngIf="!cargando" class="table-responsive">
+        <table class="table table-dark table-striped table-hover align-middle">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Apellido</th>
+              <th scope="col" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let autor of autores">
+              <th scope="row">{{ autor.id }}</th>
+
+              <td>
+                <ng-container *ngIf="autorEditando?.id === autor.id; else verNombre">
+                  <input
+                    class="form-control form-control-sm bg-secondary text-white border-secondary **w-100 input-no-resize**"
+                    [(ngModel)]="autorEditando!.nombre" name="editNombre-{{ autor.id }}" />
+                </ng-container>
+                <ng-template #verNombre>{{ autor.nombre }}</ng-template>
+              </td>
+
+              <td>
+                <ng-container *ngIf="autorEditando?.id === autor.id; else verApellido">
+                  <input
+                    class="form-control form-control-sm bg-secondary text-white border-secondary **w-100 input-no-resize**"
+                    [(ngModel)]="autorEditando!.apellido" name="editApellido-{{ autor.id }}" />
+                </ng-container>
+                <ng-template #verApellido>{{ autor.apellido }}</ng-template>
+              </td>
+
+              <td class="text-center">
+                <ng-container *ngIf="autorEditando?.id === autor.id">
+                  <button class="btn btn-success btn-sm me-2" (click)="actualizarAutor()" title="Guardar cambios">
+                    <i class="bi bi-save"></i> Guardar
+                  </button>
+                  <button class="btn btn-secondary btn-sm" (click)="autorEditando = null" title="Cancelar edición">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                  </button>
+                </ng-container>
+
+                <ng-container *ngIf="autorEditando?.id !== autor.id">
+                  <button class="btn btn-warning btn-sm me-2" (click)="seleccionarAutor(autor)" title="Editar autor">
+                    <i class="bi bi-pencil"></i> Editar
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="confirmarEliminar(autor.id)" title="Eliminar autor">
+                    <i class="bi bi-trash"></i> Eliminar
+                  </button>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal d-block" tabindex="-1" *ngIf="confirmandoEliminar" style="background-color: rgba(0, 0, 0, 0.5)">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-warning">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirmar Eliminación
+        </h5>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close"
+          (click)="cancelarEliminar()"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Seguro que deseas eliminar este autor? Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-secondary" (click)="cancelarEliminar()">
+          <i class="bi bi-x-circle me-1"></i> Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" (click)="eliminarAutorConfirmado()">
+          <i class="bi bi-trash-fill me-1"></i> Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal d-block" tabindex="-1" *ngIf="modalError" style="background-color: rgba(0, 0, 0, 0.5)">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-danger"><i class="bi bi-x-octagon-fill me-2"></i> Error</h5>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modalError = ''"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ modalError }}</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-danger" (click)="modalError = ''">
+          <i class="bi bi-check-circle me-1"></i> Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal d-block" tabindex="-1" *ngIf="modalExito" style="background-color: rgba(0, 0, 0, 0.5)">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-bg-dark border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title text-success"><i class="bi bi-check-circle-fill me-2"></i> Éxito</h5>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modalExito = ''"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ modalExito }}</p>
+      </div>
+      <div class="modal-footer border-secondary">
+        <button type="button" class="btn btn-success" (click)="modalExito = ''">
+          <i class="bi bi-check-circle me-1"></i> Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
