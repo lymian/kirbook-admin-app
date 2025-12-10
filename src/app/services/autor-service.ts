@@ -12,7 +12,7 @@ export class AutorService {
 
   constructor(private http: HttpClient) { }
 
-  /** Obtener todos los autores */
+  /** Obtener todos los autores hey*/
   obtenerAutores(): Observable<Autor[]> {
     return this.http.get<Autor[]>(this.apiUrl);
   }
