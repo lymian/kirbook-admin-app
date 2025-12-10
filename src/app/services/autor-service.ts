@@ -8,7 +8,7 @@ import { Autor, AutorRequestDTO } from '../models/autor.model';
 })
 export class AutorService {
 
-  private apiUrl = 'http://localhost:8080/autores';
+  private apiUrl = 'https://kirbook.api.lymian.xyz/autores';
 
   constructor(private http: HttpClient) { }
 

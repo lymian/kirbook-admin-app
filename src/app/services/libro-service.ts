@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class LibroService {
-  private baseUrl = 'http://localhost:8080/libros';
+  private baseUrl = 'https://kirbook.api.lymian.xyz/libros';
 
   constructor(private http: HttpClient) { }
 

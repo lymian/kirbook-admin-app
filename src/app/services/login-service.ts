@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class LoginService {
 
-  private apiUrl = 'http://localhost:8080/auth';
+  private apiUrl = 'https://kirbook.api.lymian.xyz/auth';
 
   constructor(private http: HttpClient) { }
 

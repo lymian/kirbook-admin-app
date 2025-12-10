@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
     providedIn: 'root',
 })
 export class PedidoService {
-    private baseUrl = 'http://localhost:8080/pedidos';
+    private baseUrl = 'https://kirbook.api.lymian.xyz/pedidos';
 
     constructor(private http: HttpClient) { }
 
