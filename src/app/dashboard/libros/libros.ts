@@ -174,14 +174,14 @@ export class Libros implements OnInit {
           });
 
           // Ajustar ancho de columnas para mejor visualización
-          worksheet.columns.forEach((column) => {
+          worksheet.columns.forEach((column: any) => {
             column.width = 20;
           });
           worksheet.getColumn(1).width = 10; // ID más pequeño
           worksheet.getColumn(2).width = 40; // Título más ancho
 
           // Generar archivo
-          workbook.xlsx.writeBuffer().then((buffer) => {
+          workbook.xlsx.writeBuffer().then((buffer: any) => {
             this.guardarArchivo(buffer, 'libros_export');
             this.cargando = false;
           });
