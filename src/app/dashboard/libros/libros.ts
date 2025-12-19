@@ -144,7 +144,8 @@ export class Libros implements OnInit {
           libro.fechaPublicacion
         ]);
 
-        import('exceljs').then((ExcelJS) => {
+        import('exceljs').then((module) => {
+          const ExcelJS: any = module.default || module;
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet('Libros');
 
