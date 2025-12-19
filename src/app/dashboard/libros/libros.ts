@@ -195,7 +195,8 @@ export class Libros implements OnInit {
   }
 
   guardarArchivo(buffer: any, fileName: string) {
-    import('file-saver').then((FileSaver) => {
+    import('file-saver').then((module) => {
+      const FileSaver: any = module.default || module;
       const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const EXCEL_EXTENSION = '.xlsx';
       const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
