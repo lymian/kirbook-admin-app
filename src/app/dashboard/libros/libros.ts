@@ -126,4 +126,80 @@ export class Libros implements OnInit {
     this.cancelarConfirmar();
   }
 
+  /** ----------- EXPORTAR EXCEL ----------- */
+  exportarExcel() {
+    this.cargando = true;
+    this.libroService.obtenerLibros().subscribe({
+      next: (data) => {
+        // Prepara los datos para las filas
+        const rows = data.map((libro: any) => [
+          libro.id,
+          libro.titulo,
+          libro.autorNombre,
+          libro.categoriaNombre,
+          libro.precio,
+          (libro.descuento || 0) + '%',
+          libro.stock,
+          libro.estado ? 'Activo' : 'Inactivo',
+          libro.fechaPublicacion
+        ]);
+
+        import('exceljs').then((ExcelJS) => {
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet('Libros');
+
+          // Definir estructura de la tabla con diseño
+          worksheet.addTable({
+            name: 'TablaLibros',
+            ref: 'A1',
+            headerRow: true,
+            totalsRow: false,
+            style: {
+              theme: 'TableStyleMedium2', // Estilo azul por defecto de Excel muy limpio
+              showRowStripes: true,
+            },
+            columns: [
+              { name: 'ID', filterButton: true },
+              { name: 'Título', filterButton: true },
+              { name: 'Autor', filterButton: true },
+              { name: 'Categoría', filterButton: true },
+              { name: 'Precio', filterButton: true },
+              { name: 'Descuento', filterButton: true },
+              { name: 'Stock', filterButton: true },
+              { name: 'Estado', filterButton: true },
+              { name: 'Fecha Publicación', filterButton: true },
+            ],
+            rows: rows,
+          });
+
+          // Ajustar ancho de columnas para mejor visualización
+          worksheet.columns.forEach((column) => {
+            column.width = 20;
+          });
+          worksheet.getColumn(1).width = 10; // ID más pequeño
+          worksheet.getColumn(2).width = 40; // Título más ancho
+
+          // Generar archivo
+          workbook.xlsx.writeBuffer().then((buffer) => {
+            this.guardarArchivo(buffer, 'libros_export');
+            this.cargando = false;
+          });
+        });
+      },
+      error: () => {
+        this.mostrarError('No se pudieron obtener los datos para exportar.');
+        this.cargando = false;
+      }
+    });
+  }
+
+  guardarArchivo(buffer: any, fileName: string) {
+    import('file-saver').then((FileSaver) => {
+      const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+      const EXCEL_EXTENSION = '.xlsx';
+      const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+      FileSaver.saveAs(data, fileName + '_' + new Date().getTime() + EXCEL_EXTENSION);
+    });
+  }
+
 }
